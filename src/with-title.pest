@@ -1,0 +1,26 @@
+document = _{ SOI ~ blocks }
+blocks   = _{ block ~ (blank_line+ ~ block)* }
+block    = _{ PEEK[..] ~ hanging_block }
+hanging_block = _{
+    title |  /* this line and the corresponding rule breaks it
+                and that without that rule ever matching! */
+    bullet_list |
+    paragraph
+}
+
+bullet_list =  { bullet_item ~ (PEEK[..] ~ bullet_item)* }
+bullet_item =  { bullet_marker ~ PUSH(" "+) ~ line ~ blist_body? ~ DROP }
+blist_body  = _{ PEEK[..-1] ~ PUSH(" " ~ POP) ~ hanging_block ~ block* }
+
+paragraph =  { line ~ (PEEK[..] ~ line)* }
+line       =  { !marker ~ (!NEWLINE ~ ANY)+ ~ NEWLINE }
+blank_line = _{ !marker ~ " "* ~ NEWLINE }
+
+bullet_marker = _{ "+" | "*" | "-" }
+marker = _{ (bullet_marker | "..") ~ " " }
+
+/* inclusion of this makes everything parse differently */
+title = {
+    PUSH("="+) ~ NEWLINE ~ PEEK[..-1] ~ " "* ~ line ~ PEEK[..-1] ~ POP
+    | line ~ PEEK[..] ~ "="+ ~ NEWLINE
+}

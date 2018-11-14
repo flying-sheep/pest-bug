@@ -1,0 +1,8 @@
+[package]
+name = "pest-bug"
+version = "0.1.0"
+authors = ["Philipp A. <flying-sheep@web.de>"]
+
+[dependencies]
+pest        = { git = 'https://github.com/flying-sheep/pest', branch = 'peek-slice' }
+pest_derive = { git = 'https://github.com/flying-sheep/pest', branch = 'peek-slice' }
