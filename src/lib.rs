@@ -1,15 +1,15 @@
 extern crate pest;
 extern crate pest_derive;
 
-pub mod no_title {
+pub mod title_one_rule {
     #[derive(pest_derive::Parser)]
-    #[grammar = "no-title.pest"]
+    #[grammar = "title-one-rule.pest"]
     pub struct Parser_;
 }
 
-pub mod with_title {
+pub mod title_two_rules {
     #[derive(pest_derive::Parser)]
-    #[grammar = "with-title.pest"]
+    #[grammar = "title-two-rules.pest"]
     pub struct Parser_;
 }
 
@@ -59,12 +59,12 @@ paragraph
     }} }
     
     #[test]
-    fn no_title() {
-        parse_nested_lists!(no_title);
+    fn title_one_rule() {
+        parse_nested_lists!(title_one_rule);
     }
     
     #[test]
-    fn with_title() {
-        parse_nested_lists!(with_title);
+    fn title_two_rules() {
+        parse_nested_lists!(title_two_rules);
     }
 }

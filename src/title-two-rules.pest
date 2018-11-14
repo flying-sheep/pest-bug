@@ -2,8 +2,7 @@ document = _{ SOI ~ blocks }
 blocks   = _{ block ~ (blank_line+ ~ block)* }
 block    = _{ PEEK[..] ~ hanging_block }
 hanging_block = _{
-    // title |
-    /* ↑ this not being tried changes the parse result? */
+    (title_both | title_underline) |
     bullet_list |
     paragraph
 }
@@ -18,3 +17,8 @@ blank_line = _{ !marker ~ " "* ~ NEWLINE }
 
 bullet_marker = _{ "+" | "*" | "-" }
 marker = _{ (bullet_marker | "..") ~ " " }
+
+/* inclusion of this makes everything parse differently */
+title = { title_both | title_underline }
+title_both = { PUSH("="+) ~ NEWLINE ~ PEEK[..-1] ~ " "* ~ line ~ PEEK[..-1] ~ POP }
+title_underline = { line ~ PEEK[..] ~ "="+ ~ NEWLINE }
